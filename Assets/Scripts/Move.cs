@@ -53,26 +53,32 @@ public class Move : MonoBehaviour
 
   private IEnumerator moveStepByStep(Vector3 stepMove, int times)
   {
+    Vector3 originAngle = transform.eulerAngles;
     for (int i = 0; i < times; i++)
     {
-      moveStep(stepMove);
+      moveStep(stepMove, originAngle);
       yield return new WaitForSecondsRealtime(1);
     }
 
   }
 
-  private void moveStep(Vector3 stepMove)
+  private void moveStep(Vector3 stepMove, Vector3 originAngle)
   {
     transform.position += (stepMove + new Vector3(0, jumpHeight, 0)) * scale;
+    transform.eulerAngles = originAngle;
 
   }
 
 
   private bool angleEqual(float a, float b)
   {
-    float threshhold = 0.1f;
+    float threshhold = 10f;
     a %= 360;
     b %= 360;
-    return (a - b) < threshhold && (a - b) > -1 * threshhold;
+    return (
+      (a - b) < threshhold && (a - b) > -1 * threshhold ||
+      (a - 360 - b) < threshhold && (a - 360 - b) > -1 * threshhold ||
+      (a + 360 - b) < threshhold && (a + 360 - b) > -1 * threshhold
+    );
   }
 }
