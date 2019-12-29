@@ -17,6 +17,7 @@ public class Move : MonoBehaviour
   public float scale = 1;
 
 
+
   // private Vector3 toMove;
   public void move(DIRECTION direction, int times, EVENT callbackEvent)
   {
@@ -58,7 +59,7 @@ public class Move : MonoBehaviour
     for (int i = 0; i < times; i++)
     {
       moveStep(stepMove, originAngle);
-      yield return new WaitForSecondsRealtime(1);
+      yield return new WaitForSecondsRealtime(moveSpeed);
     }
     EventManager.GetInstance.TriggerEvent(callbackEvent);
 

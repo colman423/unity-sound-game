@@ -54,4 +54,5 @@ public enum EVENT
     GO_NEXT_STAGE = 1,
     GO_WRONG_PENALTY = 2,
     END_WRONG_PENALTY = 3,
+    END_GO_NEXT_STAGE = 4,
 }

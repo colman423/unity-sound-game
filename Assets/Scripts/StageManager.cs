@@ -1,10 +1,12 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Events;
 public class StageManager : MonoBehaviour
 {
+  public GameObject Player;
 
-  public AudioSource audio;
+  public AudioSource audioSrc;
   public float audioDistance;
 
   public Stage[] stageList;
@@ -17,7 +19,7 @@ public class StageManager : MonoBehaviour
 
 
 
-  public void goNextStage()
+  public IEnumerator goNextStage()
   {
     if (nowStageNo > -1)
     {
@@ -30,7 +32,12 @@ public class StageManager : MonoBehaviour
     nowStageStep = nowStage.cubes.Length;
     nowStageCorrectDirection = nowStage.correctDirection;
     setCorrectCubes(nowStage.cubes, true);
+
+    Player.GetComponent<Rotate>().rotate(nowStage.turnAngle);
+    yield return new WaitForSecondsRealtime(3);
+
     setAudioDirection(nowStageCorrectDirection);
+    EventManager.GetInstance.TriggerEvent(EVENT.END_GO_NEXT_STAGE);
   }
 
   private void setCorrectCubes(GameObject[] cubes, bool isCorrectCube)
@@ -44,20 +51,18 @@ public class StageManager : MonoBehaviour
 
   private void setAudioDirection(DIRECTION direction)
   {
-    audio.enabled = false;
     switch (direction)
     {
       case DIRECTION.LEFT:
-        audio.transform.localPosition = new Vector3(-1*audioDistance, 0, 0);
+        audioSrc.transform.localPosition = new Vector3(-1*audioDistance, 0, 0);
         break;
       case DIRECTION.RIGHT:
-        audio.transform.localPosition = new Vector3(audioDistance, 0, 0);
+        audioSrc.transform.localPosition = new Vector3(audioDistance, 0, 0);
         break;
       case DIRECTION.FRONT:
-        audio.transform.localPosition = new Vector3(0, 0, audioDistance);
+        audioSrc.transform.localPosition = new Vector3(0, 0, audioDistance);
         break;
     }
-    audio.enabled = true;
 
   }
 

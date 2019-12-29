@@ -5,5 +5,6 @@ using UnityEngine;
 public class Stage
 {
   public DIRECTION correctDirection;
+  public float turnAngle;
   [SerializeField] public GameObject[] cubes;
 }

@@ -5,7 +5,10 @@ public class GameManager : MonoBehaviour
 {
   public GameObject player;
   public GameObject UIPanel;
+  public AudioSource audioSrc;
+
   private Move m_Move;
+
   private StageManager stageManager;
   private PenaltyManager penaltyManager;
 
@@ -14,6 +17,7 @@ public class GameManager : MonoBehaviour
   private Vector3 angleBeforeMove;
 
   private UnityAction goNextStageAction;
+  private UnityAction endGoNextStageAction;
   private UnityAction goWrongPenaltyAction;
   private UnityAction endWrongPenaltyAction;
 
@@ -28,9 +32,13 @@ public class GameManager : MonoBehaviour
 
 
     goNextStageAction = new UnityAction(goNextStage);
+    endGoNextStageAction = new UnityAction(endGoNextStage);
     goWrongPenaltyAction = new UnityAction(goWrongPanelty);
     endWrongPenaltyAction = new UnityAction(endWrongPanelty);
+
     EventManager.GetInstance.StartListening(EVENT.GO_NEXT_STAGE, goNextStageAction);
+    EventManager.GetInstance.StartListening(EVENT.END_GO_NEXT_STAGE, endGoNextStageAction);
+    
     EventManager.GetInstance.StartListening(EVENT.GO_WRONG_PENALTY, goWrongPenaltyAction);
     EventManager.GetInstance.StartListening(EVENT.END_WRONG_PENALTY, endWrongPenaltyAction);
 
@@ -41,8 +49,12 @@ public class GameManager : MonoBehaviour
 
   public void goNextStage()
   {
-    stageManager.goNextStage();
+    StartCoroutine(stageManager.goNextStage());
+  }
+
+  private void endGoNextStage() {
     UIPanel.SetActive(true);
+    audioSrc.enabled = true;
   }
 
   public void goWrongPanelty()
@@ -52,6 +64,7 @@ public class GameManager : MonoBehaviour
   }
   private void endWrongPanelty() {
     UIPanel.SetActive(true);
+    audioSrc.enabled = true;
     player.transform.position = positionBeforeMove;
     player.transform.eulerAngles = angleBeforeMove;
 
@@ -75,6 +88,7 @@ public class GameManager : MonoBehaviour
   private void goDirection(DIRECTION direction)
   {
     UIPanel.SetActive(false);
+    audioSrc.enabled = false;
     positionBeforeMove = player.transform.position;
     angleBeforeMove = player.transform.eulerAngles;
     if (stageManager.nowStageCorrectDirection == direction)
