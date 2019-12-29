@@ -15,6 +15,7 @@ public class GameManager : MonoBehaviour
   private DIRECTION nowStageCorrectDirection;
 
   public int wrongStep = 1;
+  private Vector3 positionBeforeMove;
 
   private UnityAction goNextStageAction;
   private UnityAction goWrongPenaltyAction;
@@ -39,6 +40,12 @@ public class GameManager : MonoBehaviour
 
   public void goNextStage()
   {
+    Stage prevStage = stageList[nowStageNo];
+    foreach (GameObject cube in prevStage.cubes)
+    {
+      cube.GetComponent<TouchCube>().isCorrectCube = false;
+    }
+    
     nowStageNo++;
     nowStage = stageList[nowStageNo];
     nowStageStep = nowStage.cubes.Length;
@@ -54,6 +61,7 @@ public class GameManager : MonoBehaviour
   {
     Debug.Log("goWrongPanelty");
     UIPanel.SetActive(true);
+    player.transform.position = positionBeforeMove;
   }
 
 
@@ -74,6 +82,7 @@ public class GameManager : MonoBehaviour
   private void goDirection(DIRECTION direction)
   {
     UIPanel.SetActive(false);
+    positionBeforeMove = player.transform.position;
     if (nowStageCorrectDirection == direction)
     {
       m_Move.move(nowStageCorrectDirection, nowStageStep, EVENT.GO_NEXT_STAGE);
