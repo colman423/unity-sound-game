@@ -19,6 +19,11 @@ public class DevEditor : Editor
     {
       appendColumn(devManager);
     }
+    if (GUILayout.Button("rename"))
+    {
+      rename(devManager);
+    }
+
 
   }
   // public GameObject cube;
@@ -59,7 +64,7 @@ public class DevEditor : Editor
       foreach (Transform cube in row)
       {
         string[] splitName = cube.name.Split(' ');
-        cube.name = rowName + " " + splitName[1];
+        cube.name = rowName + " " + splitName[1] + " " + splitName[2];
       }
     }
 
