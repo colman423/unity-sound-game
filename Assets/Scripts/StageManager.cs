@@ -57,6 +57,8 @@ public class StageManager : MonoBehaviour
         audio.transform.localPosition = new Vector3(0, 0, audioDistance);
         break;
     }
+    audio.enabled = true;
+
   }
 
 
