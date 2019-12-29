@@ -11,10 +11,12 @@ public class DevEditor : Editor
   {
     base.OnInspectorGUI();
     DevManager devManager = (DevManager)target;
-    if ( GUILayout.Button("appendRow") ) {
+    if (GUILayout.Button("appendRow"))
+    {
       appendRow(devManager);
     }
-    if ( GUILayout.Button("appendColumn") ) {
+    if (GUILayout.Button("appendColumn"))
+    {
       appendColumn(devManager);
     }
 
@@ -34,8 +36,8 @@ public class DevEditor : Editor
       int no = Int32.Parse(name);
       cube.localPosition = new Vector3(no - 50, 0, 0);
     }
-  } 
-   private void appendColumn(DevManager devManager)
+  }
+  private void appendColumn(DevManager devManager)
   {
     GameObject column = devManager.column;
     foreach (Transform cube in column.transform)
@@ -44,8 +46,23 @@ public class DevEditor : Editor
       name = name.Split('(')[1];
       name = name.Split(')')[0];
       int no = Int32.Parse(name);
-      cube.localPosition = new Vector3(0, 0, 50-no);
+      cube.localPosition = new Vector3(0, 0, 50 - no);
     }
+  }
+
+  private void rename(DevManager devManager)
+  {
+    GameObject column = devManager.column;
+    foreach (Transform row in column.transform)
+    {
+      string rowName = row.name;
+      foreach (Transform cube in row)
+      {
+        string[] splitName = cube.name.Split(' ');
+        cube.name = rowName + " " + splitName[1];
+      }
+    }
+
   }
 
 }
