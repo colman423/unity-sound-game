@@ -4,18 +4,12 @@ using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
   public GameObject player;
-  private Move m_Move;
   public GameObject UIPanel;
-
-
-  public Stage[] stageList;
-  public int nowStageNo = -1;
-  private Stage nowStage;
-  private int nowStageStep;
-  private DIRECTION nowStageCorrectDirection;
+  private Move m_Move;
+  private StageManager stageManager;
 
   public int wrongStep = 1;
-  private Vector3 positionBeforeMove;
+  private Transform transformBeforeMove;
 
   private UnityAction goNextStageAction;
   private UnityAction goWrongPenaltyAction;
@@ -26,6 +20,7 @@ public class GameManager : MonoBehaviour
   private void Start()
   {
     m_Move = player.GetComponent<Move>();
+    stageManager = GetComponent<StageManager>();
 
 
     goNextStageAction = new UnityAction(goNextStage);
@@ -40,20 +35,7 @@ public class GameManager : MonoBehaviour
 
   public void goNextStage()
   {
-    Stage prevStage = stageList[nowStageNo];
-    foreach (GameObject cube in prevStage.cubes)
-    {
-      cube.GetComponent<TouchCube>().isCorrectCube = false;
-    }
-    
-    nowStageNo++;
-    nowStage = stageList[nowStageNo];
-    nowStageStep = nowStage.cubes.Length;
-    nowStageCorrectDirection = nowStage.correctDirection;
-    foreach (GameObject cube in nowStage.cubes)
-    {
-      cube.GetComponent<TouchCube>().isCorrectCube = true;
-    }
+    stageManager.goNextStage();
     UIPanel.SetActive(true);
   }
 
@@ -61,7 +43,8 @@ public class GameManager : MonoBehaviour
   {
     Debug.Log("goWrongPanelty");
     UIPanel.SetActive(true);
-    player.transform.position = positionBeforeMove;
+    player.transform.position = transformBeforeMove.position;
+    player.transform.eulerAngles = transformBeforeMove.eulerAngles;
   }
 
 
@@ -82,10 +65,10 @@ public class GameManager : MonoBehaviour
   private void goDirection(DIRECTION direction)
   {
     UIPanel.SetActive(false);
-    positionBeforeMove = player.transform.position;
-    if (nowStageCorrectDirection == direction)
+    transformBeforeMove = player.transform;
+    if (stageManager.nowStageCorrectDirection == direction)
     {
-      m_Move.move(nowStageCorrectDirection, nowStageStep, EVENT.GO_NEXT_STAGE);
+      m_Move.move(stageManager.nowStageCorrectDirection, stageManager.nowStageStep, EVENT.GO_NEXT_STAGE);
     }
     else
     {
