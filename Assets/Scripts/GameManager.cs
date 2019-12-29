@@ -1,9 +1,11 @@
 using System;
 using UnityEngine;
+using UnityEngine.Events;
 public class GameManager : MonoBehaviour
 {
   public GameObject player;
   private Move m_Move;
+  public GameObject UIPanel;
 
 
   public Stage[] stageList;
@@ -12,7 +14,10 @@ public class GameManager : MonoBehaviour
   private int nowStageStep;
   private DIRECTION nowStageCorrectDirection;
 
-  public int wrongStep = 3;
+  public int wrongStep = 1;
+
+  private UnityAction goNextStageAction;
+  private UnityAction goWrongPenaltyAction;
 
 
 
@@ -21,7 +26,13 @@ public class GameManager : MonoBehaviour
   {
     m_Move = player.GetComponent<Move>();
 
-    goNextStage();
+
+    goNextStageAction = new UnityAction(goNextStage);
+    goWrongPenaltyAction = new UnityAction(goWrongPanelty);
+    EventManager.GetInstance.StartListening(EVENT.GO_NEXT_STAGE, goNextStageAction);
+    EventManager.GetInstance.StartListening(EVENT.GO_WRONG_PENALTY, goWrongPenaltyAction);
+
+    EventManager.GetInstance.TriggerEvent(EVENT.GO_NEXT_STAGE);
   }
 
 
@@ -36,25 +47,43 @@ public class GameManager : MonoBehaviour
     {
       cube.GetComponent<TouchCube>().isCorrectCube = true;
     }
+    UIPanel.SetActive(true);
+  }
+
+  public void goWrongPanelty()
+  {
+    Debug.Log("goWrongPanelty");
+    UIPanel.SetActive(true);
   }
 
 
 
   public void pressLeft()
   {
-    int step = nowStageCorrectDirection == DIRECTION.LEFT ? nowStageStep : wrongStep;
-    m_Move.move(DIRECTION.LEFT, step);
+    goDirection(DIRECTION.LEFT);
   }
   public void pressRight()
   {
-    int step = nowStageCorrectDirection == DIRECTION.RIGHT ? nowStageStep : wrongStep;
-    m_Move.move(DIRECTION.RIGHT, step);
+    goDirection(DIRECTION.RIGHT);
   }
   public void pressFront()
   {
-    int step = nowStageCorrectDirection == DIRECTION.FRONT ? nowStageStep : wrongStep;
-    m_Move.move(DIRECTION.FRONT, step);
+    goDirection(DIRECTION.FRONT);
 
   }
+  private void goDirection(DIRECTION direction)
+  {
+    UIPanel.SetActive(false);
+    if (nowStageCorrectDirection == direction)
+    {
+      m_Move.move(nowStageCorrectDirection, nowStageStep, EVENT.GO_NEXT_STAGE);
+    }
+    else
+    {
+      m_Move.move(direction, wrongStep, EVENT.GO_WRONG_PENALTY);
 
+
+    }
+
+  }
 }

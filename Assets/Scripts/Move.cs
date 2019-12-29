@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using System.Collections;
+using UnityEngine.Events;
 
 public enum DIRECTION
 {
@@ -17,7 +18,7 @@ public class Move : MonoBehaviour
 
 
   // private Vector3 toMove;
-  public void move(DIRECTION direction, int times)
+  public void move(DIRECTION direction, int times, EVENT callbackEvent)
   {
     Vector3 stepMove = new Vector3(0, 0, 0);
     if (angleEqual(transform.eulerAngles.y, 0))
@@ -48,10 +49,10 @@ public class Move : MonoBehaviour
     {
       Debug.Log("Move.move angleEqual ERRRR!!!");
     }
-    StartCoroutine(moveStepByStep(stepMove, times));
+    StartCoroutine(moveStepByStep(stepMove, times, callbackEvent));
   }
 
-  private IEnumerator moveStepByStep(Vector3 stepMove, int times)
+  private IEnumerator moveStepByStep(Vector3 stepMove, int times, EVENT callbackEvent)
   {
     Vector3 originAngle = transform.eulerAngles;
     for (int i = 0; i < times; i++)
@@ -59,6 +60,7 @@ public class Move : MonoBehaviour
       moveStep(stepMove, originAngle);
       yield return new WaitForSecondsRealtime(1);
     }
+    EventManager.GetInstance.TriggerEvent(callbackEvent);
 
   }
 
