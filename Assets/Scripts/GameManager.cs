@@ -7,12 +7,15 @@ public class GameManager : MonoBehaviour
   public GameObject UIPanel;
   private Move m_Move;
   private StageManager stageManager;
+  private PenaltyManager penaltyManager;
 
   public int wrongStep = 1;
-  private Transform transformBeforeMove;
+  private Vector3 positionBeforeMove;
+  private Vector3 angleBeforeMove;
 
   private UnityAction goNextStageAction;
   private UnityAction goWrongPenaltyAction;
+  private UnityAction endWrongPenaltyAction;
 
 
 
@@ -21,12 +24,15 @@ public class GameManager : MonoBehaviour
   {
     m_Move = player.GetComponent<Move>();
     stageManager = GetComponent<StageManager>();
+    penaltyManager = GetComponent<PenaltyManager>();
 
 
     goNextStageAction = new UnityAction(goNextStage);
     goWrongPenaltyAction = new UnityAction(goWrongPanelty);
+    endWrongPenaltyAction = new UnityAction(endWrongPanelty);
     EventManager.GetInstance.StartListening(EVENT.GO_NEXT_STAGE, goNextStageAction);
     EventManager.GetInstance.StartListening(EVENT.GO_WRONG_PENALTY, goWrongPenaltyAction);
+    EventManager.GetInstance.StartListening(EVENT.END_WRONG_PENALTY, endWrongPenaltyAction);
 
     EventManager.GetInstance.TriggerEvent(EVENT.GO_NEXT_STAGE);
   }
@@ -41,10 +47,14 @@ public class GameManager : MonoBehaviour
 
   public void goWrongPanelty()
   {
-    Debug.Log("goWrongPanelty");
+    Debug.Log("goWrongPanelty 46");
+    StartCoroutine(penaltyManager.getPenalty());
+  }
+  private void endWrongPanelty() {
     UIPanel.SetActive(true);
-    player.transform.position = transformBeforeMove.position;
-    player.transform.eulerAngles = transformBeforeMove.eulerAngles;
+    player.transform.position = positionBeforeMove;
+    player.transform.eulerAngles = angleBeforeMove;
+
   }
 
 
@@ -65,7 +75,8 @@ public class GameManager : MonoBehaviour
   private void goDirection(DIRECTION direction)
   {
     UIPanel.SetActive(false);
-    transformBeforeMove = player.transform;
+    positionBeforeMove = player.transform.position;
+    angleBeforeMove = player.transform.eulerAngles;
     if (stageManager.nowStageCorrectDirection == direction)
     {
       m_Move.move(stageManager.nowStageCorrectDirection, stageManager.nowStageStep, EVENT.GO_NEXT_STAGE);

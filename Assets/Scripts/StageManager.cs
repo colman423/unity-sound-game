@@ -4,6 +4,9 @@ using UnityEngine.Events;
 public class StageManager : MonoBehaviour
 {
 
+  public AudioSource audio;
+  public float audioDistance;
+
   public Stage[] stageList;
   public int nowStageNo = -1;
 
@@ -27,6 +30,7 @@ public class StageManager : MonoBehaviour
     nowStageStep = nowStage.cubes.Length;
     nowStageCorrectDirection = nowStage.correctDirection;
     setCorrectCubes(nowStage.cubes, true);
+    setAudioDirection(nowStageCorrectDirection);
   }
 
   private void setCorrectCubes(GameObject[] cubes, bool isCorrectCube)
@@ -36,6 +40,23 @@ public class StageManager : MonoBehaviour
       cube.GetComponent<TouchCube>().isCorrectCube = isCorrectCube;
     }
 
+  }
+
+  private void setAudioDirection(DIRECTION direction)
+  {
+    audio.enabled = false;
+    switch (direction)
+    {
+      case DIRECTION.LEFT:
+        audio.transform.localPosition = new Vector3(-1*audioDistance, 0, 0);
+        break;
+      case DIRECTION.RIGHT:
+        audio.transform.localPosition = new Vector3(audioDistance, 0, 0);
+        break;
+      case DIRECTION.FRONT:
+        audio.transform.localPosition = new Vector3(0, 0, audioDistance);
+        break;
+    }
   }
 
 
