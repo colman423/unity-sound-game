@@ -41,6 +41,7 @@ public class EventManager
   }
   public void TriggerEvent(EVENT eventNo)
   {
+    Debug.Log("TriggerEvent "+eventNo);
     UnityEvent thisEvent = null;
     if (eventManager.eventDictionary.TryGetValue(eventNo, out thisEvent))
     {

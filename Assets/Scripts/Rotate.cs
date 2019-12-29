@@ -11,6 +11,7 @@ public class Rotate : MonoBehaviour
 
   public void rotate(float angle)
   {
+    Debug.Log("Rotate rotate");
     targetAngleY = transform.eulerAngles.y + angle;
     isRotating = true;
     cameraFollow.followAng = true;
