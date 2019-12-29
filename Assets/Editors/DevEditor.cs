@@ -60,11 +60,11 @@ public class DevEditor : Editor
     GameObject column = devManager.column;
     foreach (Transform row in column.transform)
     {
-      string rowName = row.name;
+      string rowName = row.name.Replace(" ", string.Empty);
       foreach (Transform cube in row)
       {
         string[] splitName = cube.name.Split(' ');
-        cube.name = rowName + " " + splitName[1] + " " + splitName[2];
+        cube.name = rowName + " " + splitName[2] + "" + splitName[3];
       }
     }
 
