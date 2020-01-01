@@ -64,7 +64,7 @@ public class DevEditor : Editor
       foreach (Transform cube in row)
       {
         string[] splitName = cube.name.Split(' ');
-        cube.name = rowName + " " + splitName[2] + "" + splitName[3];
+        cube.name = rowName + " " + splitName[1];
       }
     }
 

@@ -28,11 +28,23 @@ public class Move : MonoBehaviour
       else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(1, 0, 0);
       else if (direction == DIRECTION.FRONT) stepMove = new Vector3(0, 0, 1);
     }
+    else if (angleEqual(transform.eulerAngles.y, 45))
+    {
+      if (direction == DIRECTION.LEFT) stepMove = new Vector3(-1, 0, 1);
+      else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(1, 0, -1);
+      else if (direction == DIRECTION.FRONT) stepMove = new Vector3(1, 0, 1);
+    }
     else if (angleEqual(transform.eulerAngles.y, 90))
     {
       if (direction == DIRECTION.LEFT) stepMove = new Vector3(0, 0, 1);
       else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(0, 0, -1);
       else if (direction == DIRECTION.FRONT) stepMove = new Vector3(1, 0, 0);
+    }
+    else if (angleEqual(transform.eulerAngles.y, 135))
+    {
+      if (direction == DIRECTION.LEFT) stepMove = new Vector3(1, 0, 1);
+      else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(-1, 0, -1);
+      else if (direction == DIRECTION.FRONT) stepMove = new Vector3(1, 0, -1);
     }
     else if (angleEqual(transform.eulerAngles.y, 180))
     {
@@ -40,11 +52,23 @@ public class Move : MonoBehaviour
       else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(-1, 0, 0);
       else if (direction == DIRECTION.FRONT) stepMove = new Vector3(0, 0, -1);
     }
+    else if (angleEqual(transform.eulerAngles.y, 225))
+    {
+      if (direction == DIRECTION.LEFT) stepMove = new Vector3(1, 0, -1);
+      else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(-1, 0, 1);
+      else if (direction == DIRECTION.FRONT) stepMove = new Vector3(-1, 0, -1);
+    }
     else if (angleEqual(transform.eulerAngles.y, 270))
     {
       if (direction == DIRECTION.LEFT) stepMove = new Vector3(0, 0, -1);
       else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(0, 0, 1);
       else if (direction == DIRECTION.FRONT) stepMove = new Vector3(-1, 0, 0);
+    }
+    else if (angleEqual(transform.eulerAngles.y, 315))
+    {
+      if (direction == DIRECTION.LEFT) stepMove = new Vector3(-1, 0, -1);
+      else if (direction == DIRECTION.RIGHT) stepMove = new Vector3(1, 0, 1);
+      else if (direction == DIRECTION.FRONT) stepMove = new Vector3(-1, 0, 1);
     }
     else
     {
